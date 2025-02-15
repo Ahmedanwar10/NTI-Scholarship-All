@@ -1,26 +1,53 @@
 import 'dart:io';
 
-class SeatBookingSystem {
-  List<List<String>> seats;
-  Map<String, Map<String, String>> bookings;
+class Seat {
+  String status;
+  Seat() : status = 'E';
+}
 
-  SeatBookingSystem(int rows, int cols)
-      : seats = List.generate(rows, (i) => List.filled(cols, 'E')),
-        bookings = {};
+class Theater {
+  final int rows;
+  final int cols;
+  late List<List<Seat>> seats;
+
+  Theater(this.rows, this.cols) {
+    seats = List.generate(rows, (_) => List.generate(cols, (_) => Seat()));
+  }
 
   void displaySeats() {
     print("Theater Seat Layout:");
     for (var row in seats) {
-      print(row.join(' '));
+      print(row.map((seat) => seat.status).join(' '));
     }
     print("");
   }
 
+  bool isSeatAvailable(int row, int col) => seats[row][col].status == 'E';
+
+  void bookSeat(int row, int col) {
+    seats[row][col].status = 'B';
+  }
+}
+
+class Booking {
+  final String name;
+  final String phone;
+  final int row;
+  final int col;
+
+  Booking(this.name, this.phone, this.row, this.col);
+}
+
+class BookingSystem {
+  final Theater theater;
+  final List<Booking> bookings = [];
+
+  BookingSystem(this.theater);
+
   void bookSeat(String name, String phone, int row, int col) {
-    String seatKey = "($row, $col)";
-    if (seats[row][col] == 'E') {
-      seats[row][col] = 'B';
-      bookings[seatKey] = {'Name': name, 'Phone': phone};
+    if (theater.isSeatAvailable(row, col)) {
+      theater.bookSeat(row, col);
+      bookings.add(Booking(name, phone, row, col));
       print("Seat booked successfully!\n");
     } else {
       print("This seat is already booked.\n");
@@ -32,34 +59,39 @@ class SeatBookingSystem {
     if (bookings.isEmpty) {
       print("No bookings yet.");
     } else {
-      bookings.forEach((seat, details) {
-        print("Seat $seat - Name: \${details['Name']}, Phone: \${details['Phone']}");
-      });
+      for (var booking in bookings) {
+        print("Seat (\${booking.row}, \${booking.col}) - Name: \${booking.name}, Phone: \${booking.phone}");
+      }
     }
   }
 }
 
 void main() {
-  SeatBookingSystem bookingSystem = SeatBookingSystem(5, 5);
+  final theater = Theater(5, 5);
+  final bookingSystem = BookingSystem(theater);
 
   while (true) {
-    bookingSystem.displaySeats();
+    theater.displaySeats();
 
-    print("Enter your name (or press Enter to quit): ");
-    String name = stdin.readLineSync()!;
-    if (name.trim().isEmpty) break;
+    stdout.write("Enter your name (or press Enter to quit): ");
+    final name = stdin.readLineSync()?.trim();
+    if (name == null || name.isEmpty) break;
 
-    print("Enter your phone number: ");
-    String phone = stdin.readLineSync()!;
+    stdout.write("Enter your phone number: ");
+    final phone = stdin.readLineSync()?.trim() ?? "";
 
-    print("Enter row (0-4): ");
-    int row = int.parse(stdin.readLineSync()!);
-    print("Enter column (0-4): ");
-    int col = int.parse(stdin.readLineSync()!);
+    stdout.write("Enter row (0-4): ");
+    final row = int.tryParse(stdin.readLineSync() ?? "") ?? -1;
+    stdout.write("Enter column (0-4): ");
+    final col = int.tryParse(stdin.readLineSync() ?? "") ?? -1;
 
-    bookingSystem.bookSeat(name, phone, row, col);
+    if (row >= 0 && row < 5 && col >= 0 && col < 5) {
+      bookingSystem.bookSeat(name, phone, row, col);
+    } else {
+      print("Invalid seat selection. Please try again.\n");
+    }
   }
 
-  bookingSystem.displaySeats();
+  theater.displaySeats();
   bookingSystem.displayBookings();
 }
