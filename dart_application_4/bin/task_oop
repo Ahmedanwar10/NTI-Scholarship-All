@@ -1,0 +1,164 @@
+// import 'dart:io';
+// import'package:task_oop/ValidatorTest.dart';
+
+// void main() {
+//   print("\n🎭 Welcome To Our Theater 🎭\n");
+
+//   List<List<String>> seats = List.generate(5, (_) => List.filled(5, 'E'));
+
+//   Map<String, Map<String, String>> bookings = {};
+
+//   int number = ValidatorTest.getInput<int>(validator: ValidatorTest.numberValidator(1, 5));
+
+//   print(number);
+
+//   while (true) {
+//     printMenu();
+//     int choice = getInput<int>(validator: numberValidator(1, 4));
+
+//     switch (choice) {
+//       case 1:
+//         bookSeat(seats, bookings);
+//         break;
+//       case 2:
+//         printSeats(seats);
+//         break;
+//       case 3:
+//         printUsers(bookings);
+//         break;
+//       case 4:
+//         print("\n👋 See You Back!\n");
+//         return;
+//       default:
+//         print("\n❌ Invalid choice! Please select a valid option.\n");
+//         break;
+//     }
+//   }
+// }
+
+// // Function to print menu
+// void printMenu() {
+//   print("\npress 1 to book new seat");
+//   print("press 2 to show the theater seats");
+//   print("press 3 to show users data");
+//   print("press 4 to exit");
+// }
+
+// // Function to print the theater seats
+// void printSeats(List<List<String>> seats) {
+//   print("\n🎭 Theater Seats:");
+//   for (var row in seats) {
+//     print(row.join(" "));
+//   }
+// }
+
+// // Function to book a seat
+// void bookSeat(List<List<String>> seats, Map<String, Map<String, String>> bookings) {
+//   int row = getInput<int>(validator: numberValidator(1, 5)) - 1;
+//   int col = getInput<int>(validator: numberValidator(1, 5)) - 1;
+
+//   // Check if seat is available
+//   if (seats[row][col] == 'B') {
+//     print("\n❌ Seat is already booked! Try another one.");
+//     return;
+//   }
+
+//   String name = getInput<String>(
+//     validator: (input) => input.isNotEmpty ? input : null,
+//   );
+
+//   String phone = getInput<String>(
+//     validator: (input) => RegExp(r'^\d+$').hasMatch(input) ? input : null,
+//   );
+
+//   // Book the seat
+//   seats[row][col] = 'B';
+//   bookings["${row + 1},${col + 1}"] = {"name": name, "phone": phone};
+
+//   print("\n✅ Seat booked successfully!");
+// }
+
+// // Function to print user booking details
+// void printUsers(Map<String, Map<String, String>> bookings) {
+//   if (bookings.isEmpty) {
+//     print("\n📜 No bookings yet.");
+//     return;
+//   }
+// // استيراد مكتبة 'dart:io' لاستخدام الإدخال والإخراج في الكونسول
+// import 'dart:io';
+
+// void main() {
+//   // رسالة ترحيبية عند بدء تشغيل البرنامج
+//   print("\n🎭 Welcome To Our Theater 🎭\n");
+
+//   // إنشاء مصفوفة 5x5 لتمثيل مقاعد المسرح، كلها تبدأ بحرف 'E' (فارغة)
+//   List<List<String>> seats = List.generate(5, (_) => List.filled(5, 'E'));
+
+//   // خريطة (Map) لتخزين بيانات الحجوزات (المفتاح هو موقع المقعد، والقيمة هي بيانات المستخدم)
+//   Map<String, Map<String, String>> bookings = {};
+
+//   while (true) {
+//     // طباعة القائمة للمستخدم
+//     printMenu();
+    
+//     // قراءة اختيار المستخدم والتحقق من أنه بين 1 و 4
+//     int choice = getInput<int>(validator: numberValidator(1, 4));
+
+//     // تنفيذ الإجراء المناسب حسب اختيار المستخدم
+//     switch (choice) {
+//       case 1:
+//         bookSeat(seats, bookings); // حجز مقعد
+//         break;
+//       case 2:
+//         printSeats(seats); // عرض حالة المقاعد
+//         break;
+//       case 3:
+//         printUsers(bookings); // عرض بيانات المستخدمين
+//         break;
+//       case 4:
+//         print("\n👋 See You Back!\n"); // إنهاء البرنامج
+//         return;
+//       default:
+//         print("\n❌ Invalid choice! Please select a valid option.\n");
+//         break;
+//     }
+//   }
+// }
+
+// // دالة لطباعة قائمة الخيارات للمستخدم
+// void printMenu() {
+//   print("\npress 1 to book new seat");
+//   print("press 2 to show the theater seats");
+//   print("press 3 to show users data");
+//   print("press 4 to exit");
+// }
+
+// // دالة لطباعة حالة المقاعد في المسرح
+// void printSeats(List<List<String>> seats) {
+//   print("\n🎭 Theater Seats:");
+//   for (var row in seats) {
+//     print(row.join(" ")); // طباعة كل صف في سطر واحد
+//   }
+// }
+
+// // دالة لحجز مقعد
+// void bookSeat(List<List<String>> seats, Map<String, Map<String, String>> bookings) {
+//   print("\n📌 Enter seat row (1-5):");
+//   int row = getInput<int>(validator: numberValidator(1, 5)) - 1; // الحصول على الصف (وتحويله لصيغة المصفوفة)
+  
+//   print("📌 Enter seat column (1-5):");
+//   int col = getInput<int>(validator: numberValidator(1, 5)) - 1; // الحصول على العمود
+
+//   // التحقق مما إذا كان المقعد محجوزًا بالفعل
+//   if (seats[row][col] == 'B') {
+//     print("\n❌ Seat is already booked! Try another one.");
+//     return;
+ 
+
+//   print("\n📜 Users Booking Details:");
+//   for (var entry in bookings.entries) {
+//     print("🎟 Seat ${entry.key}: ${entry.value['name']} - ${entry.value['phone']}");
+//   }
+// }
+
+// // 🛠 Generic input function that handles validation and parsing
